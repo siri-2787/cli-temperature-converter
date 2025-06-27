@@ -1,24 +1,23 @@
-import argparse
+import argparse  # Importing argparse for command-line argument handling
 
-def celsius_to_fahrenheit(c):
-    return (c * 9/5) + 32
+# Set up argument parser with description
+parser = argparse.ArgumentParser(description="CLI Temperature Converter: Celsius ↔ Fahrenheit")
 
-def fahrenheit_to_celsius(f):
-    return (f - 32) * 5/9
+# Add mutually exclusive arguments so user can provide either -c or -f, not both
+group = parser.add_mutually_exclusive_group(required=True)
+group.add_argument("-c", "--celsius", type=float, help="Temperature in Celsius")
+group.add_argument("-f", "--fahrenheit", type=float, help="Temperature in Fahrenheit")
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="🌡️ CLI Temperature Converter")
-    group = parser.add_mutually_exclusive_group(required=True)
+# Parse the arguments
+args = parser.parse_args()
 
-    group.add_argument("-c", "--celsius", type=float, help="Convert Celsius to Fahrenheit")
-    group.add_argument("-f", "--fahrenheit", type=float, help="Convert Fahrenheit to Celsius")
+# If user gave Celsius, convert to Fahrenheit
+if args.celsius is not None:
+    f = (args.celsius * 9 / 5) + 32
+    print(f"{args.celsius}°C = {f:.2f}°F")
 
-    args = parser.parse_args()
+# If user gave Fahrenheit, convert to Celsius
+else:
+    c = (args.fahrenheit - 32) * 5 / 9
+    print(f"{args.fahrenheit}°F = {c:.2f}°C")
 
-    if args.celsius is not None:
-        result = celsius_to_fahrenheit(args.celsius)
-        print(f"{args.celsius}°C = {result:.2f}°F")
-
-    elif args.fahrenheit is not None:
-        result = fahrenheit_to_celsius(args.fahrenheit)
-        print(f"{args.fahrenheit}°F = {result:.2f}°C")
